@@ -45,11 +45,24 @@ const TIER_BRIEF: Record<z.infer<typeof TierEnum>, string> = {
     "Custom: balance quirky/off-beat experiences with the user's own prompt. Prioritize personalization.",
 };
 
+const GEMINI_MODEL = "gemini-3.1-flash-lite";
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+type GeminiGenerateContentResponse = {
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{
+        text?: string;
+      }>;
+    };
+  }>;
+};
+
 export const generateItinerary = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => InputSchema.parse(raw))
   .handler(async ({ data }): Promise<Itinerary> => {
-    const key = process.env.LOVABLE_API_KEY;
-    if (!key) throw new Error("Missing LOVABLE_API_KEY");
+    const key = process.env.VITE_GEMINI_API_KEY;
+    if (!key) throw new Error("Missing VITE_GEMINI_API_KEY");
 
     const system = `You are a meticulous travel journal author. You write day-by-day itineraries that feel like hand-annotated journals — specific place names, atmospheric detail, and a mix of tourist attractions, local events, cultural/heritage sites, and fun activities. Every day is unique. Output STRICT JSON only, no prose, no markdown fences.`;
 
@@ -77,33 +90,43 @@ Return JSON matching EXACTLY this TypeScript type:
 }
 Include 4-6 activities per day, mixing categories. Do not repeat places across days. Use real, well-known and lesser-known places for ${data.destination}.`;
 
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await fetch(GEMINI_ENDPOINT, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "Lovable-API-Key": key,
+        "x-goog-api-key": key,
       },
       body: JSON.stringify({
-        model: "google/gemini-3.5-flash",
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: userPrompt },
+        systemInstruction: {
+          parts: [{ text: system }],
+        },
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: userPrompt }],
+          },
         ],
-        response_format: { type: "json_object" },
+        generationConfig: {
+          responseMimeType: "application/json",
+        },
       }),
     });
 
     if (!res.ok) {
       const text = await res.text().catch(() => "");
       if (res.status === 429) throw new Error("AI is busy — please retry in a moment.");
-      if (res.status === 402) throw new Error("AI credits exhausted for this workspace.");
+      if (res.status === 401 || res.status === 403)
+        throw new Error("Gemini API key is invalid or unauthorized.");
       throw new Error(`AI request failed (${res.status}): ${text.slice(0, 200)}`);
     }
 
-    const payload = (await res.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
-    const content = payload.choices?.[0]?.message?.content ?? "";
+    const payload = (await res.json()) as GeminiGenerateContentResponse;
+    const content =
+      payload.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text ?? "")
+        .join("")
+        .trim() ?? "";
+    if (!content) throw new Error("AI returned an empty itinerary.");
     let parsed: unknown;
     try {
       parsed = JSON.parse(content);
