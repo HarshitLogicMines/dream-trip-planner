@@ -49,9 +49,6 @@ function Settings() {
   return (
     <main className="w-full px-8 py-12 space-y-12">
       <header className="animate-reveal">
-        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          Preferences // Settings
-        </div>
         <h1 className="text-4xl md:text-5xl font-serif italic mt-4">Tune your journal.</h1>
       </header>
 

@@ -75,9 +75,6 @@ function Auth() {
       </section>
 
       <section className="bg-card ring-1 ring-border rounded-3xl p-10 animate-reveal [animation-delay:100ms]">
-        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          {mode === "signin" ? "Return traveler" : "New traveler"}
-        </div>
         <h2 className="mt-3 font-serif italic text-4xl">
           {mode === "signin" ? "Welcome back." : "Begin your archive."}
         </h2>

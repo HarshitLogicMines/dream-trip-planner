@@ -39,9 +39,6 @@ function Profile() {
   return (
     <main className="w-full px-8 py-12 space-y-12">
       <header className="animate-reveal">
-        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          Traveler Log // Profile
-        </div>
         <div className="mt-6 flex items-center gap-6">
           <div className="size-24 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-mono text-2xl font-semibold">
             {initials}

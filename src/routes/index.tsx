@@ -86,9 +86,6 @@ function Landing() {
       {/* Hero + live preview */}
       <section className="grid lg:grid-cols-12 gap-12 items-start">
         <div className="lg:col-span-5 space-y-8 animate-reveal">
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            AI Travel Journals // Est. 2026
-          </div>
           <h1 className="text-5xl md:text-7xl font-serif italic text-balance leading-[0.9]">
             Plan your next
             <br />
@@ -123,7 +120,6 @@ function Landing() {
 
         <div className="lg:col-span-7 space-y-6 animate-reveal [animation-delay:150ms]">
           <div className="flex justify-between items-end border-b-2 border-dashed border-border pb-4">
-            <div className="font-mono text-xs text-muted-foreground">LIVE PREVIEW // LOG_082</div>
             <div className="font-serif italic text-2xl">Kyoto: The Zen Path</div>
           </div>
 
@@ -221,9 +217,6 @@ function Landing() {
       <section id="features" className="space-y-12 animate-reveal">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-dashed border-border pb-6">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Chapter_01 // Features
-            </div>
             <h2 className="font-serif italic text-4xl md:text-5xl mt-2">Everything the journal remembers.</h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">
@@ -289,9 +282,6 @@ function Landing() {
       <section id="how-it-works" className="space-y-12 animate-reveal">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-dashed border-border pb-6">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Chapter_02 // How it works
-            </div>
             <h2 className="font-serif italic text-4xl md:text-5xl mt-2">From prompt to plotted days.</h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">
@@ -323,9 +313,6 @@ function Landing() {
       <section id="stories" className="space-y-12 animate-reveal">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-dashed border-border pb-6">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Chapter_03 // Stories
-            </div>
             <h2 className="font-serif italic text-4xl md:text-5xl mt-2">Postcards from past travelers.</h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">

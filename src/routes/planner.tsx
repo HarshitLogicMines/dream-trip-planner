@@ -82,9 +82,6 @@ function Planner() {
   return (
     <main className="w-full px-8 py-12 space-y-16">
       <header className="space-y-4 animate-reveal">
-        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          Trip Planner // Draft_New_Log
-        </div>
         <h1 className="text-4xl md:text-6xl font-serif italic leading-[0.95]">Draft your itinerary.</h1>
         <p className="max-w-2xl text-muted-foreground">
           Tell us where you're going, for how long, and who's coming. Pick your fare class — we'll write the
@@ -142,10 +139,9 @@ function Planner() {
 
         {/* Tiers */}
         <div className="lg:col-span-7 space-y-4 animate-reveal [animation-delay:150ms]">
-          <div className="flex justify-between items-end border-b-2 border-dashed border-border pb-4">
-            <div className="font-mono text-xs text-muted-foreground">STEP_02 // FARE_CLASS</div>
+          {/* <div className="flex justify-between items-end border-b-2 border-dashed border-border pb-4">
             <div className="font-serif italic text-xl">Choose your class</div>
-          </div>
+          </div> */}
 
           <div className="grid sm:grid-cols-2 gap-4">
             {TIERS.map((t) => {
@@ -234,9 +230,6 @@ function ItineraryView({ itinerary }: { itinerary: Itinerary }) {
   return (
     <section className="space-y-6 animate-reveal">
       <div className="flex justify-between items-end border-b-2 border-dashed border-border pb-4">
-        <div className="font-mono text-xs text-muted-foreground">
-          LOG // {itinerary.tier.toUpperCase()} // {itinerary.travelers} traveler(s)
-        </div>
         <div className="font-serif italic text-2xl md:text-3xl">{itinerary.destination}</div>
       </div>
 
