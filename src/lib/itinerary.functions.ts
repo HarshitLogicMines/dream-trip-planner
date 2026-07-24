@@ -18,6 +18,8 @@ export type ItineraryActivity = {
   title: string;
   category: string;
   description: string;
+  placeId?: string;
+  imageUrl?: string;
 };
 
 export type ItineraryDay = {
@@ -64,7 +66,15 @@ export const generateItinerary = createServerFn({ method: "POST" })
     const key = process.env.VITE_GEMINI_API_KEY;
     if (!key) throw new Error("Missing VITE_GEMINI_API_KEY");
 
-    const system = `You are a meticulous travel journal author. You write day-by-day itineraries that feel like hand-annotated journals — specific place names, atmospheric detail, and a mix of tourist attractions, local events, cultural/heritage sites, and fun activities. Every day is unique. Output STRICT JSON only, no prose, no markdown fences.`;
+    const system = `You are a meticulous travel journal author. You write day-by-day itineraries that feel like hand-annotated journals — specific place names, atmospheric detail, and a mix of tourist attractions, local events, cultural/heritage sites, and fun activities. Every day is unique.
+
+CRITICAL: For the "title" field in each activity, use ONLY real, specific place names or attractions that can be found in Google Maps/Places API:
+- Use official, well-known place names (e.g., "Fushimi Inari Shrine" not "ancient shrine")
+- Include both famous and local hidden gems
+- Be precise with locations (e.g., "Arashiyama Bamboo Grove" not just "bamboo forest")
+- Use the destination context to make activities geographically accurate
+
+Output STRICT JSON only, no prose, no markdown fences.`;
 
     const userPrompt = `Plan a trip to "${data.destination}" for ${data.days} day(s) for ${data.travelers} traveler(s).
 Fare class: ${TIER_BRIEF[data.tier]}
@@ -81,14 +91,28 @@ Return JSON matching EXACTLY this TypeScript type:
     "summary": string,        // 1-2 sentences framing the day
     "activities": Array<{
       "time": string,         // e.g. "07:30" or "Morning"
-      "title": string,        // specific place or experience
+      "title": string,        // MUST BE REAL place name searchable in Google Maps (e.g., "Fushimi Inari Shrine", "Philosopher's Path")
       "category": "Tourist Attraction" | "Local Event" | "Cultural Heritage" | "Fun Activity" | "Dining" | "Rest",
       "description": string   // 1-3 sentences, journal voice, atmospheric
     }>
   }>,
   "tips": string[]            // 3-5 practical local tips tailored to the tier
 }
-Include 4-6 activities per day, mixing categories. Do not repeat places across days. Use real, well-known and lesser-known places for ${data.destination}.`;
+Include 4-6 activities per day, mixing categories. Do not repeat places across days. 
+
+CRITICAL: Use ONLY real, verified places that exist in ${data.destination}:
+- Well-known attractions (temples, museums, parks, markets)
+- Hidden gems (local restaurants, alleyways, viewpoints)
+- Current events or seasonal activities
+- All place names must be searchable on Google Maps/Places
+
+Example good activity titles:
+- "Fushimi Inari Taisha" (real shrine)
+- "Philosopher's Path" (real walking trail)
+- "Ouka Coffee" (real café)
+- "Higashiyama District" (real neighborhood)
+
+Avoid generic names like "local café" or "scenic spot" - use specific, real place names only.`;
 
     const res = await fetch(GEMINI_ENDPOINT, {
       method: "POST",
@@ -144,4 +168,48 @@ Include 4-6 activities per day, mixing categories. Do not repeat places across d
       days: Array.isArray(p.days) ? p.days : [],
       tips: Array.isArray(p.tips) ? p.tips : [],
     };
+  });
+
+// Server function to fetch place images from Google Places API
+export const fetchPlaceImage = createServerFn({ method: "POST" })
+  .inputValidator(
+    (raw: unknown) =>
+      z.object({ placeName: z.string().min(1).max(200), destination: z.string().min(1).max(120) }).parse(raw)
+  )
+  .handler(async ({ placeName, destination }): Promise<string | null> => {
+    const apiKey = process.env.VITE_GOOGLE_PLACES_API_KEY;
+    if (!apiKey) return null; // Silently fail if API key missing
+
+    try {
+      // Search for the place using Text Search API
+      const searchRes = await fetch("https://maps.googleapis.com/maps/api/place/textsearch/json", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          query: `${placeName} ${destination}`,
+          key: apiKey,
+        }),
+      });
+
+      if (!searchRes.ok) return null;
+
+      type PlaceSearchResult = {
+        results?: Array<{
+          place_id?: string;
+          photos?: Array<{ photo_reference: string }>;
+        }>;
+      };
+
+      const searchData = (await searchRes.json()) as PlaceSearchResult;
+      const place = searchData.results?.[0];
+      if (!place?.photos?.[0]?.photo_reference) return null;
+
+      const photoRef = place.photos[0].photo_reference;
+
+      // Build photo URL using Places Photo API
+      const imageUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=${photoRef}&key=${apiKey}`;
+      return imageUrl;
+    } catch {
+      return null; // Silently fail
+    }
   });
