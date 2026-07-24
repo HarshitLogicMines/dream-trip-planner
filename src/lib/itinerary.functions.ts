@@ -209,7 +209,14 @@ export const fetchUnsplashImage = createServerFn({ method: "POST" })
         })
         .parse(raw)
   )
-  .handler(async ({ query, destination }): Promise<string | null> => {
+  .handler(async ({ data }): Promise<string | null> => {
+    const { query, destination } = data;
+
+    // 1) PRIMARY: Google Places API — returns a REAL photo of the actual place,
+    //    including local cafes, restaurants, shops (not just famous landmarks).
+    const placesUrl = await fetchGooglePlacePhoto(query, destination);
+    if (placesUrl) return placesUrl;
+
     // Build a fallback chain of search terms, most specific first.
     const candidates = [
       query,
@@ -217,22 +224,115 @@ export const fetchUnsplashImage = createServerFn({ method: "POST" })
       destination ?? null,
     ].filter((t): t is string => Boolean(t && t.trim()));
 
-    // 1) Try Wikipedia REST Summary API — returns the curated lead photo
-    //    for the exact article. This is a REAL image of the actual place.
+    // 2) FALLBACK: Wikipedia REST Summary API — curated lead photo for the
+    //    exact article. This is a REAL image of the actual place.
     for (const term of candidates) {
       const url = await fetchWikipediaThumbnail(term);
       if (url) return url;
     }
 
-    // 2) Fallback: Wikipedia OpenSearch → find the best-matching article,
+    // 3) FALLBACK: Wikipedia OpenSearch → find the best-matching article,
     //    then fetch its lead image via the MediaWiki API.
     for (const term of candidates) {
       const url = await fetchWikipediaViaSearch(term);
       if (url) return url;
     }
 
+    // 4) FALLBACK: Openverse (Creative Commons image search, keyless).
+    //    Covers local cafes/restaurants/experiences that have no Wikipedia
+    //    article, so every card still shows a relevant real photo.
+    for (const term of candidates) {
+      const url = await fetchOpenverseImage(term);
+      if (url) return url;
+    }
+
     return null; // Nothing found — UI shows graceful MapPin placeholder
   });
+
+// ── Openverse helper (keyless Creative Commons image search) ──────────────────
+
+async function fetchOpenverseImage(term: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://api.openverse.org/v1/images/?q=${encodeURIComponent(
+        term.trim()
+      )}&page_size=1&mature=false`,
+      { headers: { Accept: "application/json" } }
+    );
+    if (!res.ok) return null;
+
+    type OpenverseResponse = {
+      results?: Array<{ url?: string; thumbnail?: string }>;
+    };
+
+    const data = (await res.json()) as OpenverseResponse;
+    const first = data.results?.[0];
+    return first?.thumbnail || first?.url || null;
+  } catch {
+    return null;
+  }
+}
+
+// ── Google Places helpers ─────────────────────────────────────────────────────
+
+/**
+ * Fetches a REAL photo of a place via the Google Places API (legacy web service).
+ *
+ * Two steps:
+ *  1. Find Place from Text → resolve the query to a place with a photo_reference
+ *  2. Places Photo endpoint → 302-redirects to the actual image; we follow the
+ *     redirect and return the final googleusercontent URL (which does NOT
+ *     contain the API key, so the key stays server-side).
+ *
+ * Works for arbitrary places: cafes, restaurants, shops, viewpoints, landmarks.
+ */
+async function fetchGooglePlacePhoto(
+  query: string,
+  destination?: string
+): Promise<string | null> {
+  const key = process.env.VITE_MAPS_API_KEY;
+  if (!key) return null; // No Maps key configured — fall back to Wikipedia
+
+  const input = destination ? `${query}, ${destination}` : query;
+
+  try {
+    // Step 1: Find Place from Text → photo_reference
+    const findRes = await fetch(
+      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(
+        input
+      )}&inputtype=textquery&fields=photos,place_id&key=${key}`
+    );
+    if (!findRes.ok) return null;
+
+    type FindPlaceResponse = {
+      status?: string;
+      candidates?: Array<{
+        place_id?: string;
+        photos?: Array<{ photo_reference?: string }>;
+      }>;
+    };
+
+    const findData = (await findRes.json()) as FindPlaceResponse;
+    const photoRef = findData.candidates?.[0]?.photos?.[0]?.photo_reference;
+    if (!photoRef) return null;
+
+    // Step 2: Photo endpoint → follow the 302 redirect to the actual image URL
+    const photoRes = await fetch(
+      `https://maps.googleapis.com/maps/api/place/photo?maxwidth=640&photo_reference=${encodeURIComponent(
+        photoRef
+      )}&key=${key}`,
+      { redirect: "follow" }
+    );
+
+    // `photoRes.url` is the final image URL (lh3.googleusercontent.com) with no key
+    if (photoRes.ok && photoRes.url && !photoRes.url.includes("maps.googleapis.com")) {
+      return photoRes.url;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 // ── Wikipedia helpers ─────────────────────────────────────────────────────────
 

@@ -56,7 +56,7 @@ export function usePlaceImage(searchQuery: string, destination: string) {
   return useSuspenseQuery({
     queryKey: placeImageKeys.detail(searchQuery, destination),
     queryFn: async () => {
-      const imageUrl = await fetchImage({ query: searchQuery, destination });
+      const imageUrl = await fetchImage({ data: { query: searchQuery, destination } });
       if (!imageUrl) {
         throw new Error(
           `[use-place-image] No image found for: "${searchQuery}"`
