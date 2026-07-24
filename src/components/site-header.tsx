@@ -17,9 +17,7 @@ export function SiteHeader() {
   const navLink = (to: string, label: string) => (
     <Link
       to={to}
-      className={`transition-colors ${
-        pathname === to ? "text-accent" : "hover:text-accent"
-      }`}
+      className={`transition-colors ${pathname === to ? "text-accent" : "hover:text-accent"}`}
     >
       {label}
     </Link>

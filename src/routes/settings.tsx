@@ -102,7 +102,9 @@ function Settings() {
           <Row label="Default fare class" description="Pre-select this tier on the planner.">
             <select
               value={prefs.defaultTier}
-              onChange={(e) => setPrefs((p) => ({ ...p, defaultTier: e.target.value as Prefs["defaultTier"] }))}
+              onChange={(e) =>
+                setPrefs((p) => ({ ...p, defaultTier: e.target.value as Prefs["defaultTier"] }))
+              }
               className="bg-background border border-border rounded-md px-3 py-2 font-mono text-xs uppercase tracking-widest"
             >
               <option value="budget">Budget</option>

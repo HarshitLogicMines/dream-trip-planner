@@ -67,7 +67,13 @@ function Planner() {
     setLoading(true);
     try {
       const result = await generate({
-        data: { destination: destination.trim(), days, travelers, tier, prompt: prompt.trim() || undefined },
+        data: {
+          destination: destination.trim(),
+          days,
+          travelers,
+          tier,
+          prompt: prompt.trim() || undefined,
+        },
       });
       setItinerary(result);
       toast.success("Your journal is ready.");
@@ -83,10 +89,12 @@ function Planner() {
   return (
     <main className="w-full px-8 py-12 space-y-16">
       <header className="space-y-4 animate-reveal">
-        <h1 className="text-4xl md:text-6xl font-serif italic leading-[0.95]">Draft your itinerary.</h1>
+        <h1 className="text-4xl md:text-6xl font-serif italic leading-[0.95]">
+          Draft your itinerary.
+        </h1>
         <p className="max-w-2xl text-muted-foreground">
-          Tell us where you're going, for how long, and who's coming. Pick your fare class — we'll write the
-          journal.
+          Tell us where you're going, for how long, and who's coming. Pick your fare class — we'll
+          write the journal.
         </p>
       </header>
 
@@ -120,7 +128,9 @@ function Planner() {
                   min={1}
                   max={50}
                   value={travelers}
-                  onChange={(e) => setTravelers(Math.max(1, Math.min(50, Number(e.target.value) || 1)))}
+                  onChange={(e) =>
+                    setTravelers(Math.max(1, Math.min(50, Number(e.target.value) || 1)))
+                  }
                   className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-accent font-sans"
                 />
               </Field>
@@ -194,7 +204,10 @@ function Planner() {
           </button>
           {!user && (
             <p className="text-xs text-muted-foreground text-center">
-              You'll be asked to <Link to="/auth" className="text-accent underline underline-offset-2">sign in</Link>{" "}
+              You'll be asked to{" "}
+              <Link to="/auth" className="text-accent underline underline-offset-2">
+                sign in
+              </Link>{" "}
               before purchase.
             </p>
           )}

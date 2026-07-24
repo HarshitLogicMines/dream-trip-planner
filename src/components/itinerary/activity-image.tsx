@@ -1,9 +1,4 @@
-import {
-  Component,
-  Suspense,
-  type ErrorInfo,
-  type ReactNode,
-} from "react";
+import { Component, Suspense, type ErrorInfo, type ReactNode } from "react";
 import { MapPin } from "lucide-react";
 
 import { usePlaceImage } from "@/hooks/use-place-image";

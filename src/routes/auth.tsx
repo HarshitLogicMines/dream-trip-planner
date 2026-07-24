@@ -12,7 +12,10 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — Ephemera" },
-      { name: "description", content: "Sign in or create your Ephemera account to save AI trip journals." },
+      {
+        name: "description",
+        content: "Sign in or create your Ephemera account to save AI trip journals.",
+      },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -56,16 +59,24 @@ function Auth() {
     <main className="w-full px-8 py-12 grid md:grid-cols-2 gap-10 items-stretch">
       <section className="hidden md:flex flex-col justify-between bg-foreground text-background rounded-3xl p-10 animate-reveal">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-60">Passport // 001</div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-60">
+            Passport // 001
+          </div>
           <h1 className="mt-6 font-serif italic text-5xl leading-[0.95]">
-            Every journey is a<br />written story.
+            Every journey is a<br />
+            written story.
           </h1>
           <p className="mt-6 opacity-70 max-w-[36ch]">
-            Sign in to save your AI-authored itineraries, revisit past journeys, and sync your travel log.
+            Sign in to save your AI-authored itineraries, revisit past journeys, and sync your
+            travel log.
           </p>
         </div>
         <ul className="space-y-3 text-sm opacity-80">
-          {["Save unlimited journals", "Personalized to your fare class", "One tap to regenerate"].map((s) => (
+          {[
+            "Save unlimited journals",
+            "Personalized to your fare class",
+            "One tap to regenerate",
+          ].map((s) => (
             <li key={s} className="flex gap-3">
               <span className="text-accent font-mono">→</span>
               {s}
@@ -129,7 +140,10 @@ function Auth() {
           >
             {mode === "signin" ? "Create account" : "Have an account? Sign in"}
           </button>
-          <Link to="/" className="font-mono uppercase tracking-widest text-muted-foreground hover:text-accent">
+          <Link
+            to="/"
+            className="font-mono uppercase tracking-widest text-muted-foreground hover:text-accent"
+          >
             Back
           </Link>
         </div>
@@ -141,7 +155,9 @@ function Auth() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">{label}</label>
+      <label className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+        {label}
+      </label>
       {children}
     </div>
   );

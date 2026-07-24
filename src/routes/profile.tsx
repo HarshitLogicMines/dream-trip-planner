@@ -79,7 +79,8 @@ function Profile() {
           <Sparkles className="size-6 mx-auto text-accent" />
           <h3 className="font-serif text-2xl">Your archive is empty.</h3>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
-            Every generated itinerary will appear here once you save it. Start by drafting your first journal.
+            Every generated itinerary will appear here once you save it. Start by drafting your
+            first journal.
           </p>
           <Link
             to="/planner"
@@ -101,7 +102,9 @@ function Profile() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-card ring-1 ring-border rounded-xl p-6">
-      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        {label}
+      </div>
       <div className="font-serif text-4xl mt-2">{value}</div>
     </div>
   );
@@ -114,7 +117,9 @@ function InfoCard({ icon, label, value }: { icon: React.ReactNode; label: string
         {icon}
       </div>
       <div>
-        <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+        <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          {label}
+        </div>
         <div className="font-serif text-lg mt-0.5">{value}</div>
       </div>
     </div>

@@ -20,8 +20,7 @@ function preloadImage(url: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const img = new window.Image();
     img.onload = () => resolve(url);
-    img.onerror = () =>
-      reject(new Error(`[use-place-image] Preload failed: ${url}`));
+    img.onerror = () => reject(new Error(`[use-place-image] Preload failed: ${url}`));
     img.src = url;
   });
 }
@@ -58,9 +57,7 @@ export function usePlaceImage(searchQuery: string, destination: string) {
     queryFn: async () => {
       const imageUrl = await fetchImage({ data: { query: searchQuery, destination } });
       if (!imageUrl) {
-        throw new Error(
-          `[use-place-image] No image found for: "${searchQuery}"`
-        );
+        throw new Error(`[use-place-image] No image found for: "${searchQuery}"`);
       }
       return preloadImage(imageUrl);
     },

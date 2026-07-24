@@ -1,5 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, MapPin, ScrollText, Compass, BookOpen, Wallet, Feather, Quote } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  MapPin,
+  ScrollText,
+  Compass,
+  BookOpen,
+  Wallet,
+  Feather,
+  Quote,
+} from "lucide-react";
 import heroJournal from "@/assets/hero-journal.jpg";
 import kyotoBamboo from "@/assets/kyoto-bamboo.jpg";
 import kyotoPath from "@/assets/kyoto-path.jpg";
@@ -7,7 +17,6 @@ import kyotoTorii from "@/assets/kyoto-torii.jpg";
 import postcards from "@/assets/postcards.jpg";
 
 const DAY_IMAGES = [kyotoBamboo, kyotoPath, kyotoTorii];
-
 
 const SAMPLE_DAYS = [
   {
@@ -99,8 +108,8 @@ function Landing() {
             unfolding story.
           </h1>
           <p className="max-w-[38ch] text-muted-foreground text-lg">
-            AI-crafted itineraries that feel like hand-annotated journals. Attractions, culture, local events,
-            and fun — one uniquely-plotted day at a time.
+            AI-crafted itineraries that feel like hand-annotated journals. Attractions, culture,
+            local events, and fun — one uniquely-plotted day at a time.
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -163,7 +172,9 @@ function Landing() {
                   loading="lazy"
                   className="hidden sm:block size-20 rounded-lg object-cover shrink-0 ring-1 ring-border"
                 />
-                <div className={`font-mono shrink-0 ${d.active ? "text-accent" : "text-muted-foreground"}`}>
+                <div
+                  className={`font-mono shrink-0 ${d.active ? "text-accent" : "text-muted-foreground"}`}
+                >
                   <div className="text-2xl font-bold">{d.n}</div>
                   <div className="text-[10px] uppercase tracking-tighter opacity-60">{d.day}</div>
                 </div>
@@ -172,7 +183,10 @@ function Landing() {
                   <p className="text-sm text-muted-foreground leading-relaxed">{d.body}</p>
                   <div className="flex gap-2 flex-wrap">
                     {d.tags.map((t) => (
-                      <span key={t} className="px-2 py-1 bg-background text-[10px] font-mono rounded">
+                      <span
+                        key={t}
+                        className="px-2 py-1 bg-background text-[10px] font-mono rounded"
+                      >
                         {t}
                       </span>
                     ))}
@@ -203,8 +217,8 @@ function Landing() {
                 t.dark
                   ? "bg-foreground text-background"
                   : t.featured
-                  ? "bg-card border-2 border-accent"
-                  : "bg-card border border-border"
+                    ? "bg-card border-2 border-accent"
+                    : "bg-card border border-border"
               }`}
             >
               {t.featured && (
@@ -213,14 +227,18 @@ function Landing() {
                 </span>
               )}
               <div className="flex justify-between items-start">
-                <div className={`font-mono text-xs ${t.dark ? "opacity-60" : "text-muted-foreground"}`}>
+                <div
+                  className={`font-mono text-xs ${t.dark ? "opacity-60" : "text-muted-foreground"}`}
+                >
                   {t.code}
                 </div>
                 <div className="text-accent font-bold text-xl">{t.price}</div>
               </div>
               <div>
                 <h4 className="font-serif text-2xl">{t.name}</h4>
-                <p className={`text-xs mt-2 ${t.dark ? "opacity-60" : "text-muted-foreground"}`}>{t.body}</p>
+                <p className={`text-xs mt-2 ${t.dark ? "opacity-60" : "text-muted-foreground"}`}>
+                  {t.body}
+                </p>
               </div>
               <div
                 className={`pt-4 border-t border-dashed ${
@@ -249,10 +267,13 @@ function Landing() {
       <section id="features" className="space-y-12 animate-reveal">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-dashed border-border pb-6">
           <div>
-            <h2 className="font-serif italic text-4xl md:text-5xl mt-2">Everything the journal remembers.</h2>
+            <h2 className="font-serif italic text-4xl md:text-5xl mt-2">
+              Everything the journal remembers.
+            </h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Ephemera stitches together the details other planners forget — culture, cadence, and quiet corners.
+            Ephemera stitches together the details other planners forget — culture, cadence, and
+            quiet corners.
           </p>
         </div>
 
@@ -314,20 +335,43 @@ function Landing() {
       <section id="how-it-works" className="space-y-12 animate-reveal">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-dashed border-border pb-6">
           <div>
-            <h2 className="font-serif italic text-4xl md:text-5xl mt-2">From prompt to plotted days.</h2>
+            <h2 className="font-serif italic text-4xl md:text-5xl mt-2">
+              From prompt to plotted days.
+            </h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Five small steps between an empty page and a hand-annotated route through your next city.
+            Five small steps between an empty page and a hand-annotated route through your next
+            city.
           </p>
         </div>
 
         <ol className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
           {[
-            { n: "01", title: "Describe your journey", body: "Destination, days, travelers, and any wishes." },
-            { n: "02", title: "Choose a fare class", body: "Budget, mid-range, premium, or fully custom." },
-            { n: "03", title: "Confirm your ticket", body: "Purchase the plan to unlock generation." },
-            { n: "04", title: "AI drafts the log", body: "Culture, attractions, food, and events, day by day." },
-            { n: "05", title: "Save & wander", body: "Archive to your profile and adjust anytime." },
+            {
+              n: "01",
+              title: "Describe your journey",
+              body: "Destination, days, travelers, and any wishes.",
+            },
+            {
+              n: "02",
+              title: "Choose a fare class",
+              body: "Budget, mid-range, premium, or fully custom.",
+            },
+            {
+              n: "03",
+              title: "Confirm your ticket",
+              body: "Purchase the plan to unlock generation.",
+            },
+            {
+              n: "04",
+              title: "AI drafts the log",
+              body: "Culture, attractions, food, and events, day by day.",
+            },
+            {
+              n: "05",
+              title: "Save & wander",
+              body: "Archive to your profile and adjust anytime.",
+            },
           ].map((s, i) => (
             <li key={s.n} className="relative p-6 border-t border-border">
               <div className="font-mono text-xs text-accent">STEP_{s.n}</div>
@@ -419,7 +463,9 @@ function Landing() {
                 <Quote className="size-5 text-accent" />
                 <span className="font-mono text-[10px] text-muted-foreground">{s.stamp}</span>
               </div>
-              <blockquote className="font-serif italic text-lg leading-snug">&ldquo;{s.quote}&rdquo;</blockquote>
+              <blockquote className="font-serif italic text-lg leading-snug">
+                &ldquo;{s.quote}&rdquo;
+              </blockquote>
               <figcaption className="pt-4 border-t border-dashed border-border">
                 <div className="font-serif text-base">{s.name}</div>
                 <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
@@ -431,14 +477,14 @@ function Landing() {
         </div>
       </section>
 
-
       {/* CTA */}
       <section className="bg-foreground text-background rounded-3xl overflow-hidden animate-reveal">
         <div className="p-12 grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h2 className="text-4xl font-serif italic">Save your wandering thoughts.</h2>
             <p className="opacity-70 max-w-[36ch]">
-              Create an account to save generated journals, revisit past trips, and sync with your logbook.
+              Create an account to save generated journals, revisit past trips, and sync with your
+              logbook.
             </p>
           </div>
           <div className="flex md:justify-end">

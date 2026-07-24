@@ -170,7 +170,7 @@ Include 4-6 activities per day, mixing categories. Do not repeat places across d
     }
 
     const p = parsed as Partial<Itinerary>;
-    
+
     // Ensure all activities have imageSearchQuery — fallback to title if missing
     const normalizedDays = Array.isArray(p.days)
       ? p.days.map((day) => ({
@@ -179,14 +179,12 @@ Include 4-6 activities per day, mixing categories. Do not repeat places across d
             ? day.activities.map((activity) => ({
                 ...activity,
                 imageSearchQuery:
-                  activity.imageSearchQuery ||
-                  activity.title ||
-                  "travel photography",
+                  activity.imageSearchQuery || activity.title || "travel photography",
               }))
             : [],
         }))
       : [];
-    
+
     return {
       destination: p.destination ?? data.destination,
       tier: (p.tier as Itinerary["tier"]) ?? data.tier,
@@ -200,14 +198,13 @@ Include 4-6 activities per day, mixing categories. Do not repeat places across d
 // No API key required — returns the actual photo of the actual place (not stock).
 // The AI (Gemini) provides the exact place name; we look up its real photo.
 export const fetchUnsplashImage = createServerFn({ method: "POST" })
-  .inputValidator(
-    (raw: unknown) =>
-      z
-        .object({
-          query: z.string().min(1).max(200),
-          destination: z.string().max(120).optional(),
-        })
-        .parse(raw)
+  .inputValidator((raw: unknown) =>
+    z
+      .object({
+        query: z.string().min(1).max(200),
+        destination: z.string().max(120).optional(),
+      })
+      .parse(raw),
   )
   .handler(async ({ data }): Promise<string | null> => {
     const { query, destination } = data;
@@ -255,9 +252,9 @@ async function fetchOpenverseImage(term: string): Promise<string | null> {
   try {
     const res = await fetch(
       `https://api.openverse.org/v1/images/?q=${encodeURIComponent(
-        term.trim()
+        term.trim(),
       )}&page_size=1&mature=false`,
-      { headers: { Accept: "application/json" } }
+      { headers: { Accept: "application/json" } },
     );
     if (!res.ok) return null;
 
@@ -286,10 +283,7 @@ async function fetchOpenverseImage(term: string): Promise<string | null> {
  *
  * Works for arbitrary places: cafes, restaurants, shops, viewpoints, landmarks.
  */
-async function fetchGooglePlacePhoto(
-  query: string,
-  destination?: string
-): Promise<string | null> {
+async function fetchGooglePlacePhoto(query: string, destination?: string): Promise<string | null> {
   const key = process.env.VITE_MAPS_API_KEY;
   if (!key) return null; // No Maps key configured — fall back to Wikipedia
 
@@ -299,8 +293,8 @@ async function fetchGooglePlacePhoto(
     // Step 1: Find Place from Text → photo_reference
     const findRes = await fetch(
       `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(
-        input
-      )}&inputtype=textquery&fields=photos,place_id&key=${key}`
+        input,
+      )}&inputtype=textquery&fields=photos,place_id&key=${key}`,
     );
     if (!findRes.ok) return null;
 
@@ -319,9 +313,9 @@ async function fetchGooglePlacePhoto(
     // Step 2: Photo endpoint → follow the 302 redirect to the actual image URL
     const photoRes = await fetch(
       `https://maps.googleapis.com/maps/api/place/photo?maxwidth=640&photo_reference=${encodeURIComponent(
-        photoRef
+        photoRef,
       )}&key=${key}`,
-      { redirect: "follow" }
+      { redirect: "follow" },
     );
 
     // `photoRes.url` is the final image URL (lh3.googleusercontent.com) with no key
@@ -349,7 +343,7 @@ async function fetchWikipediaThumbnail(term: string): Promise<string | null> {
   try {
     const res = await fetch(
       `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term.trim())}`,
-      { headers: { Accept: "application/json" } }
+      { headers: { Accept: "application/json" } },
     );
     if (!res.ok) return null;
 
@@ -373,9 +367,9 @@ async function fetchWikipediaViaSearch(term: string): Promise<string | null> {
     // Step 1: OpenSearch → best matching article title
     const searchRes = await fetch(
       `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&limit=1&origin=*&search=${encodeURIComponent(
-        term.trim()
+        term.trim(),
       )}`,
-      { headers: { Accept: "application/json" } }
+      { headers: { Accept: "application/json" } },
     );
     if (!searchRes.ok) return null;
 
@@ -387,9 +381,9 @@ async function fetchWikipediaViaSearch(term: string): Promise<string | null> {
     // Step 2: pageimages → lead thumbnail for the resolved title
     const imgRes = await fetch(
       `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize=640&titles=${encodeURIComponent(
-        title
+        title,
       )}`,
-      { headers: { Accept: "application/json" } }
+      { headers: { Accept: "application/json" } },
     );
     if (!imgRes.ok) return null;
 

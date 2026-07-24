@@ -2,9 +2,9 @@
 
 ## What Changed
 
-Ab **sirf Gemini API key** chahiye! Google Places API koi extra setup nahi. 
+Ab **sirf Gemini API key** chahiye! Google Places API koi extra setup nahi.
 
-Gemini AI automatically generate karta hai perfect image search queries (2-4 words), aur Unsplash (free API) se images fetch hote hain. 
+Gemini AI automatically generate karta hai perfect image search queries (2-4 words), aur Unsplash (free API) se images fetch hote hain.
 
 ### Architecture:
 
@@ -61,7 +61,7 @@ npm run dev
 2️⃣ Gemini generates itinerary with search queries:
    Activity: "Fushimi Inari Shrine"
    imageSearchQuery: "fushimi inari shrine"
-   
+
 3️⃣ Unsplash searches: "fushimi inari shrine"
 
 4️⃣ Returns best matching image
@@ -118,6 +118,7 @@ npm run dev
 ### Gemini's Search Queries (Perfect for Unsplash):
 
 Gemini generates 2-4 word queries:
+
 - ✅ "fushimi inari shrine" → Perfect match
 - ✅ "arashiyama bamboo grove" → Great photos
 - ✅ "japanese ramen bowl" → Food photos
@@ -134,13 +135,13 @@ Gemini generates 2-4 word queries:
 
 ## Files Updated
 
-| File | Change | Impact |
-|------|--------|--------|
-| `src/lib/itinerary.functions.ts` | Replaced Google Places with Unsplash fetcher | Only Gemini key needed |
-| `src/hooks/use-place-image.ts` | Updated to use imageSearchQuery | Simplified query handling |
-| `src/components/itinerary/activity-card.tsx` | Updated to pass searchQuery | Uses Gemini-generated queries |
-| `src/components/itinerary/activity-image.tsx` | Updated props | Works with search queries |
-| `.env.local` | Removed Google Places key | Cleaner setup |
+| File                                          | Change                                       | Impact                        |
+| --------------------------------------------- | -------------------------------------------- | ----------------------------- |
+| `src/lib/itinerary.functions.ts`              | Replaced Google Places with Unsplash fetcher | Only Gemini key needed        |
+| `src/hooks/use-place-image.ts`                | Updated to use imageSearchQuery              | Simplified query handling     |
+| `src/components/itinerary/activity-card.tsx`  | Updated to pass searchQuery                  | Uses Gemini-generated queries |
+| `src/components/itinerary/activity-image.tsx` | Updated props                                | Works with search queries     |
+| `.env.local`                                  | Removed Google Places key                    | Cleaner setup                 |
 
 ---
 
@@ -154,13 +155,14 @@ export type ItineraryActivity = {
   title: string;
   category: string;
   description: string;
-  imageSearchQuery?: string;  // ← NEW: From Gemini AI
+  imageSearchQuery?: string; // ← NEW: From Gemini AI
 };
 ```
 
 ### Gemini Prompt Enforcement:
 
 Gemini now MUST provide `imageSearchQuery` for each activity:
+
 - 2-4 words only
 - Searchable on Unsplash
 - Examples: "fushimi inari shrine", "cherry blossoms spring"
@@ -175,7 +177,8 @@ Gemini now MUST provide `imageSearchQuery` for each activity:
 
 **Why**: Some very specific or niche places might not have photos
 
-**Solution**: 
+**Solution**:
+
 - Gemini automatically fallbacks to related terms
 - Component shows MapPin icon gracefully
 - Never crashes the page ✅
@@ -184,7 +187,8 @@ Gemini now MUST provide `imageSearchQuery` for each activity:
 
 **Cause**: Unsplash API slow or network latency
 
-**Feature**: 
+**Feature**:
+
 - `<Suspense>` shows skeleton while loading
 - Images preload before rendering
 - Concurrent loading (3 images at a time)
@@ -202,10 +206,10 @@ Gemini now MUST provide `imageSearchQuery` for each activity:
 
 ## Environment Variables
 
-| Variable | Required | Example |
-|----------|----------|---------|
-| `VITE_GEMINI_API_KEY` | ✅ Yes | `sk-proj-...` |
-| `VITE_GOOGLE_PLACES_API_KEY` | ❌ No | ~~Not needed~~ |
+| Variable                     | Required | Example        |
+| ---------------------------- | -------- | -------------- |
+| `VITE_GEMINI_API_KEY`        | ✅ Yes   | `sk-proj-...`  |
+| `VITE_GOOGLE_PLACES_API_KEY` | ❌ No    | ~~Not needed~~ |
 
 ---
 
@@ -225,11 +229,11 @@ Gemini now MUST provide `imageSearchQuery` for each activity:
 
 ## Cost Comparison
 
-| Approach | Setup | Gemini Cost | Image API Cost | Monthly |
-|----------|-------|-------------|---|---------|
-| Old (Google Places) | 2 APIs | ₹6 | ₹3000+ | ₹3006+ |
-| **New (Gemini + Unsplash)** | 1 API | ₹6 | FREE | **₹6** |
-| Savings | Easier | Same | 99% off | **99% cheaper** |
+| Approach                    | Setup  | Gemini Cost | Image API Cost | Monthly         |
+| --------------------------- | ------ | ----------- | -------------- | --------------- |
+| Old (Google Places)         | 2 APIs | ₹6          | ₹3000+         | ₹3006+          |
+| **New (Gemini + Unsplash)** | 1 API  | ₹6          | FREE           | **₹6**          |
+| Savings                     | Easier | Same        | 99% off        | **99% cheaper** |
 
 ---
 

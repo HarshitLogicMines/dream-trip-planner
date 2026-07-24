@@ -18,9 +18,7 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
     <section className="space-y-6 animate-reveal" aria-label="Generated itinerary">
       {/* ── Destination header ─────────────────────────────────────── */}
       <div className="flex justify-between items-end border-b-2 border-dashed border-border pb-4">
-        <div className="font-serif italic text-2xl md:text-3xl">
-          {itinerary.destination}
-        </div>
+        <div className="font-serif italic text-2xl md:text-3xl">{itinerary.destination}</div>
         <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
           {itinerary.days.length} {itinerary.days.length === 1 ? "day" : "days"} ·{" "}
           {itinerary.travelers} {itinerary.travelers === 1 ? "traveler" : "travelers"} ·{" "}
@@ -42,18 +40,14 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
                 <div className="text-3xl font-bold leading-none">
                   {String(d.day).padStart(2, "0")}
                 </div>
-                <div className="text-[10px] uppercase tracking-tighter opacity-60 mt-1">
-                  Day
-                </div>
+                <div className="text-[10px] uppercase tracking-tighter opacity-60 mt-1">Day</div>
               </div>
 
               <div className="flex-1 min-w-0 space-y-5">
                 {/* Day title + summary */}
                 <div>
                   <h3 className="font-serif text-2xl leading-snug">{d.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-                    {d.summary}
-                  </p>
+                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{d.summary}</p>
                 </div>
 
                 {/* Activity list — each item is independently async */}
@@ -78,10 +72,7 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
 
       {/* ── Field notes (tips) ─────────────────────────────────────── */}
       {itinerary.tips.length > 0 && (
-        <aside
-          className="bg-foreground text-background rounded-xl p-8"
-          aria-label="Travel tips"
-        >
+        <aside className="bg-foreground text-background rounded-xl p-8" aria-label="Travel tips">
           <div className="font-mono text-[10px] uppercase tracking-widest opacity-60">
             Field notes
           </div>

@@ -43,8 +43,8 @@
   --radius: 0.75rem;
 
   /* Journal / analog editorial palette */
-  --background: oklch(0.965 0.008 75);         /* #f7f4f0 paper */
-  --foreground: oklch(0.24 0.012 45);          /* #2a2421 ink */
+  --background: oklch(0.965 0.008 75); /* #f7f4f0 paper */
+  --foreground: oklch(0.24 0.012 45); /* #2a2421 ink */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.24 0.012 45);
   --popover: oklch(1 0 0);
@@ -59,7 +59,7 @@
   --muted: oklch(0.94 0.008 70);
   --muted-foreground: oklch(0.45 0.02 45);
 
-  --accent: oklch(0.52 0.135 40);              /* #a34d35 sienna */
+  --accent: oklch(0.52 0.135 40); /* #a34d35 sienna */
   --accent-foreground: oklch(0.98 0.005 75);
 
   --destructive: oklch(0.55 0.22 27);
@@ -93,13 +93,23 @@
 }
 
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes shimmer {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 @utility animate-reveal {
@@ -112,7 +122,7 @@
 
 .ticket-cutout::before,
 .ticket-cutout::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 16px;
   height: 16px;
@@ -121,8 +131,12 @@
   left: -9px;
   border: 1px solid var(--border);
 }
-.ticket-cutout::before { top: 25%; }
-.ticket-cutout::after { bottom: 25%; }
+.ticket-cutout::before {
+  top: 25%;
+}
+.ticket-cutout::after {
+  bottom: 25%;
+}
 
 @layer base {
   * {
@@ -135,7 +149,10 @@
     font-family: var(--font-sans);
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-serif);
   }
 }

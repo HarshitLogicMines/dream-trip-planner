@@ -18,7 +18,9 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Log_404</div>
+        <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          Log_404
+        </div>
         <h1 className="mt-6 font-serif italic text-6xl">Off the map.</h1>
         <p className="mt-4 text-sm text-muted-foreground">
           This page never made it into the journal. Let's get you back on route.
