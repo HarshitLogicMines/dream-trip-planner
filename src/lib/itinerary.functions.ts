@@ -196,39 +196,116 @@ Include 4-6 activities per day, mixing categories. Do not repeat places across d
     };
   });
 
-// Server function to fetch place image from Unsplash (FREE, no auth required)
+// Server function to fetch REAL place image from Wikipedia/Wikimedia.
+// No API key required — returns the actual photo of the actual place (not stock).
+// The AI (Gemini) provides the exact place name; we look up its real photo.
 export const fetchUnsplashImage = createServerFn({ method: "POST" })
   .inputValidator(
     (raw: unknown) =>
-      z.object({ query: z.string().min(1).max(200) }).parse(raw)
+      z
+        .object({
+          query: z.string().min(1).max(200),
+          destination: z.string().max(120).optional(),
+        })
+        .parse(raw)
   )
-  .handler(async ({ query }): Promise<string | null> => {
-    try {
-      // Unsplash API doesn't require authentication for basic requests
-      const res = await fetch(
-        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&order_by=relevant`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
+  .handler(async ({ query, destination }): Promise<string | null> => {
+    // Build a fallback chain of search terms, most specific first.
+    const candidates = [
+      query,
+      destination ? `${query} ${destination}` : null,
+      destination ?? null,
+    ].filter((t): t is string => Boolean(t && t.trim()));
 
-      if (!res.ok) return null;
-
-      type UnsplashResponse = {
-        results?: Array<{
-          urls?: {
-            regular?: string;
-          };
-        }>;
-      };
-
-      const data = (await res.json()) as UnsplashResponse;
-      const imageUrl = data.results?.[0]?.urls?.regular;
-      return imageUrl || null;
-    } catch {
-      return null; // Silently fail if network error
+    // 1) Try Wikipedia REST Summary API — returns the curated lead photo
+    //    for the exact article. This is a REAL image of the actual place.
+    for (const term of candidates) {
+      const url = await fetchWikipediaThumbnail(term);
+      if (url) return url;
     }
+
+    // 2) Fallback: Wikipedia OpenSearch → find the best-matching article,
+    //    then fetch its lead image via the MediaWiki API.
+    for (const term of candidates) {
+      const url = await fetchWikipediaViaSearch(term);
+      if (url) return url;
+    }
+
+    return null; // Nothing found — UI shows graceful MapPin placeholder
   });
+
+// ── Wikipedia helpers ─────────────────────────────────────────────────────────
+
+type WikiSummary = {
+  thumbnail?: { source?: string };
+  originalimage?: { source?: string };
+};
+
+/**
+ * Direct lookup via the Wikipedia REST Summary endpoint.
+ * Upscales the thumbnail to 640px for a crisp card image.
+ */
+async function fetchWikipediaThumbnail(term: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term.trim())}`,
+      { headers: { Accept: "application/json" } }
+    );
+    if (!res.ok) return null;
+
+    const data = (await res.json()) as WikiSummary;
+    const src = data.originalimage?.source ?? data.thumbnail?.source;
+    if (!src) return null;
+
+    // Upscale the Wikimedia CDN thumbnail (e.g. /320px- → /640px-)
+    return src.replace(/\/\d+px-/, "/640px-");
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fallback: use OpenSearch to resolve a fuzzy term to a real article title,
+ * then query the MediaWiki API for that page's lead image (pageimages).
+ */
+async function fetchWikipediaViaSearch(term: string): Promise<string | null> {
+  try {
+    // Step 1: OpenSearch → best matching article title
+    const searchRes = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&limit=1&origin=*&search=${encodeURIComponent(
+        term.trim()
+      )}`,
+      { headers: { Accept: "application/json" } }
+    );
+    if (!searchRes.ok) return null;
+
+    // OpenSearch response: [query, [titles], [descriptions], [urls]]
+    const searchData = (await searchRes.json()) as [string, string[], string[], string[]];
+    const title = searchData?.[1]?.[0];
+    if (!title) return null;
+
+    // Step 2: pageimages → lead thumbnail for the resolved title
+    const imgRes = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize=640&titles=${encodeURIComponent(
+        title
+      )}`,
+      { headers: { Accept: "application/json" } }
+    );
+    if (!imgRes.ok) return null;
+
+    type PageImagesResponse = {
+      query?: {
+        pages?: Record<string, { thumbnail?: { source?: string } }>;
+      };
+    };
+
+    const imgData = (await imgRes.json()) as PageImagesResponse;
+    const pages = imgData.query?.pages ?? {};
+    for (const page of Object.values(pages)) {
+      if (page.thumbnail?.source) return page.thumbnail.source;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}

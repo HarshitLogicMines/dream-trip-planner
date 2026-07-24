@@ -6,7 +6,8 @@ import { fetchUnsplashImage } from "@/lib/itinerary.functions";
 
 export const placeImageKeys = {
   all: ["place-image"] as const,
-  detail: (query: string) => [...placeImageKeys.all, query] as const,
+  detail: (query: string, destination: string) =>
+    [...placeImageKeys.all, query, destination] as const,
 };
 
 // ─── Image Preloader ───────────────────────────────────────────────────────────
@@ -28,7 +29,9 @@ function preloadImage(url: string): Promise<string> {
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
 /**
- * Fetches and preloads a place photo from Unsplash (FREE, no API key needed).
+ * Fetches and preloads the REAL photo of a place from Wikipedia/Wikimedia.
+ * No extra API key needed — the AI (Gemini) provides the exact place name,
+ * and we resolve its actual photo (not a generic stock image).
  *
  * Uses `useSuspenseQuery` (TanStack Query v5) — the component suspends while
  * the photo loads. Pair with `<Suspense>` + error boundary in the parent:
@@ -44,16 +47,16 @@ function preloadImage(url: string): Promise<string> {
  * @example
  * ```tsx
  * // Must be inside a <Suspense> boundary:
- * const { data: imageUrl } = usePlaceImage("fushimi inari shrine");
+ * const { data: imageUrl } = usePlaceImage("Fushimi Inari Shrine", "Kyoto");
  * ```
  */
-export function usePlaceImage(searchQuery: string) {
+export function usePlaceImage(searchQuery: string, destination: string) {
   const fetchImage = useServerFn(fetchUnsplashImage);
 
   return useSuspenseQuery({
-    queryKey: placeImageKeys.detail(searchQuery),
+    queryKey: placeImageKeys.detail(searchQuery, destination),
     queryFn: async () => {
-      const imageUrl = await fetchImage({ query: searchQuery });
+      const imageUrl = await fetchImage({ query: searchQuery, destination });
       if (!imageUrl) {
         throw new Error(
           `[use-place-image] No image found for: "${searchQuery}"`

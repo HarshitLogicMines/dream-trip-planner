@@ -65,6 +65,7 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
                     <ActivityCard
                       key={`${d.day}-${i}`}
                       activity={a}
+                      destination={itinerary.destination}
                       index={i}
                     />
                   ))}

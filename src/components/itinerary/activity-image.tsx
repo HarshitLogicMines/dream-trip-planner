@@ -47,11 +47,12 @@ class ImageErrorBoundary extends Component<
 
 interface ActivityImageInnerProps {
   searchQuery: string;
+  destination: string;
 }
 
-function ActivityImageInner({ searchQuery }: ActivityImageInnerProps) {
+function ActivityImageInner({ searchQuery, destination }: ActivityImageInnerProps) {
   // `data` is guaranteed non-null here — useSuspenseQuery narrows the type.
-  const { data: imageUrl } = usePlaceImage(searchQuery);
+  const { data: imageUrl } = usePlaceImage(searchQuery, destination);
 
   return (
     <div className="shrink-0 w-20 h-20 rounded-lg overflow-hidden ring-1 ring-border group">
@@ -86,8 +87,10 @@ function ImagePlaceholder() {
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export interface ActivityImageProps {
-  /** Search query from Gemini (2-4 words, Unsplash-optimized) */
+  /** Real place name / search term (from Gemini) used to find the actual photo */
   searchQuery: string;
+  /** Overall trip destination — adds geo-context for accurate place lookup */
+  destination: string;
 }
 
 /**
@@ -102,11 +105,11 @@ export interface ActivityImageProps {
  * This component is self-contained — drop it anywhere without extra providers
  * (QueryClientProvider is already mounted at the router root).
  */
-export function ActivityImage({ placeName, destination }: ActivityImageProps) {
+export function ActivityImage({ searchQuery, destination }: ActivityImageProps) {
   return (
     <ImageErrorBoundary fallback={<ImagePlaceholder />}>
       <Suspense fallback={<ActivityImageSkeleton />}>
-        <ActivityImageInner placeName={placeName} destination={destination} />
+        <ActivityImageInner searchQuery={searchQuery} destination={destination} />
       </Suspense>
     </ImageErrorBoundary>
   );
