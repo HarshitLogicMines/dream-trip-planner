@@ -3,8 +3,6 @@ import { ActivityImage } from "./activity-image";
 
 export interface ActivityCardProps {
   activity: ItineraryActivity;
-  /** The overall trip destination — passed to `ActivityImage` for a richer search query */
-  destination: string;
   /** Zero-based position within the day's activity list — drives staggered reveal delay */
   index: number;
 }
@@ -21,7 +19,7 @@ export interface ActivityCardProps {
  * The staggered animation delay gives a cascade effect when the day card first
  * renders — each activity reveals itself 80 ms after the previous one.
  */
-export function ActivityCard({ activity, destination, index }: ActivityCardProps) {
+export function ActivityCard({ activity, index }: ActivityCardProps) {
   return (
     <li
       className="flex gap-4 items-start animate-reveal opacity-0"
@@ -39,7 +37,9 @@ export function ActivityCard({ activity, destination, index }: ActivityCardProps
       {/* ── Photo + text block ───────────────────────────────────────── */}
       <div className="flex gap-3 flex-1 min-w-0">
         {/* Location photo — suspends internally, shows skeleton while loading */}
-        <ActivityImage placeName={activity.title} destination={destination} />
+        {activity.imageSearchQuery ? (
+          <ActivityImage searchQuery={activity.imageSearchQuery} />
+        ) : null}
 
         <div className="flex-1 min-w-0 pt-0.5">
           {/* Title + category badge */}

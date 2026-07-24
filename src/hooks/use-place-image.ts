@@ -1,13 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { fetchPlaceImage } from "@/lib/itinerary.functions";
+import { fetchUnsplashImage } from "@/lib/itinerary.functions";
 
 // ─── Query key factory ────────────────────────────────────────────────────────
 
 export const placeImageKeys = {
   all: ["place-image"] as const,
-  detail: (placeName: string, destination: string) =>
-    [...placeImageKeys.all, placeName, destination] as const,
+  detail: (query: string) => [...placeImageKeys.all, query] as const,
 };
 
 // ─── Image Preloader ───────────────────────────────────────────────────────────
@@ -29,7 +28,7 @@ function preloadImage(url: string): Promise<string> {
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
 /**
- * Fetches and preloads a place photo from Google Places API for an itinerary activity.
+ * Fetches and preloads a place photo from Unsplash (FREE, no API key needed).
  *
  * Uses `useSuspenseQuery` (TanStack Query v5) — the component suspends while
  * the photo loads. Pair with `<Suspense>` + error boundary in the parent:
@@ -38,26 +37,26 @@ function preloadImage(url: string): Promise<string> {
  *  - Error    → `<ImagePlaceholder>` (MapPin icon) via `<ImageErrorBoundary>`
  *
  * Cache policy:
- *  - `staleTime: Infinity` → never re-fetches the same place within a session
+ *  - `staleTime: Infinity` → never re-fetches the same query within a session
  *  - `gcTime: 30 min`      → keeps URL in memory between page navigations
  *  - `retry: 1`            → one graceful retry before surfacing to error boundary
  *
  * @example
  * ```tsx
  * // Must be inside a <Suspense> boundary:
- * const { data: imageUrl } = usePlaceImage("Fushimi Inari", "Kyoto");
+ * const { data: imageUrl } = usePlaceImage("fushimi inari shrine");
  * ```
  */
-export function usePlaceImage(placeName: string, destination: string) {
-  const fetchImage = useServerFn(fetchPlaceImage);
+export function usePlaceImage(searchQuery: string) {
+  const fetchImage = useServerFn(fetchUnsplashImage);
 
   return useSuspenseQuery({
-    queryKey: placeImageKeys.detail(placeName, destination),
+    queryKey: placeImageKeys.detail(searchQuery),
     queryFn: async () => {
-      const imageUrl = await fetchImage({ placeName, destination });
+      const imageUrl = await fetchImage({ query: searchQuery });
       if (!imageUrl) {
         throw new Error(
-          `[use-place-image] No image found for: "${placeName}" in "${destination}"`
+          `[use-place-image] No image found for: "${searchQuery}"`
         );
       }
       return preloadImage(imageUrl);

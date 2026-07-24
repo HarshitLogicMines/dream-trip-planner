@@ -46,19 +46,18 @@ class ImageErrorBoundary extends Component<
 // commits in one atomic paint — no skeleton-to-image flash / layout shift.
 
 interface ActivityImageInnerProps {
-  placeName: string;
-  destination: string;
+  searchQuery: string;
 }
 
-function ActivityImageInner({ placeName, destination }: ActivityImageInnerProps) {
+function ActivityImageInner({ searchQuery }: ActivityImageInnerProps) {
   // `data` is guaranteed non-null here — useSuspenseQuery narrows the type.
-  const { data: imageUrl } = usePlaceImage(placeName, destination);
+  const { data: imageUrl } = usePlaceImage(searchQuery);
 
   return (
     <div className="shrink-0 w-20 h-20 rounded-lg overflow-hidden ring-1 ring-border group">
       <img
         src={imageUrl}
-        alt={`Photo of ${placeName}`}
+        alt={`Photo from: ${searchQuery}`}
         width={80}
         height={80}
         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
@@ -87,10 +86,8 @@ function ImagePlaceholder() {
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export interface ActivityImageProps {
-  /** Specific place or experience title (used as primary search term) */
-  placeName: string;
-  /** Overall trip destination (appended to the query for geographic context) */
-  destination: string;
+  /** Search query from Gemini (2-4 words, Unsplash-optimized) */
+  searchQuery: string;
 }
 
 /**

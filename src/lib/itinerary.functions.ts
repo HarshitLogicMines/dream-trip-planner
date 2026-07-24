@@ -18,8 +18,7 @@ export type ItineraryActivity = {
   title: string;
   category: string;
   description: string;
-  placeId?: string;
-  imageUrl?: string;
+  imageSearchQuery?: string; // Search term for Unsplash
 };
 
 export type ItineraryDay = {
@@ -91,28 +90,29 @@ Return JSON matching EXACTLY this TypeScript type:
     "summary": string,        // 1-2 sentences framing the day
     "activities": Array<{
       "time": string,         // e.g. "07:30" or "Morning"
-      "title": string,        // MUST BE REAL place name searchable in Google Maps (e.g., "Fushimi Inari Shrine", "Philosopher's Path")
+      "title": string,        // specific place or experience name
       "category": "Tourist Attraction" | "Local Event" | "Cultural Heritage" | "Fun Activity" | "Dining" | "Rest",
-      "description": string   // 1-3 sentences, journal voice, atmospheric
+      "description": string,  // 1-3 sentences, journal voice, atmospheric
+      "imageSearchQuery": string  // CRITICAL: 2-4 word search query for Unsplash (e.g., "Fushimi Inari shrine", "cherry blossoms Kyoto", "ramen bowl")
     }>
   }>,
   "tips": string[]            // 3-5 practical local tips tailored to the tier
 }
-Include 4-6 activities per day, mixing categories. Do not repeat places across days. 
 
-CRITICAL: Use ONLY real, verified places that exist in ${data.destination}:
-- Well-known attractions (temples, museums, parks, markets)
-- Hidden gems (local restaurants, alleyways, viewpoints)
-- Current events or seasonal activities
-- All place names must be searchable on Google Maps/Places
+CRITICAL REQUIREMENTS for "imageSearchQuery":
+- Must be 2-4 words only
+- Must describe the actual place/experience/food
+- Must be search-friendly for Unsplash
+- Should include location context when helpful
+- Examples:
+  ✅ "fushimi inari shrine"
+  ✅ "arashiyama bamboo grove"
+  ✅ "japanese ramen"
+  ✅ "kyoto temple gardens"
+  ❌ "very nice place" (too vague)
+  ❌ "morning experience" (not searchable)
 
-Example good activity titles:
-- "Fushimi Inari Taisha" (real shrine)
-- "Philosopher's Path" (real walking trail)
-- "Ouka Coffee" (real café)
-- "Higashiyama District" (real neighborhood)
-
-Avoid generic names like "local café" or "scenic spot" - use specific, real place names only.`;
+Include 4-6 activities per day, mixing categories. Do not repeat places across days.`;
 
     const res = await fetch(GEMINI_ENDPOINT, {
       method: "POST",
@@ -170,46 +170,39 @@ Avoid generic names like "local café" or "scenic spot" - use specific, real pla
     };
   });
 
-// Server function to fetch place images from Google Places API
-export const fetchPlaceImage = createServerFn({ method: "POST" })
+// Server function to fetch place image from Unsplash (FREE, no auth required)
+export const fetchUnsplashImage = createServerFn({ method: "POST" })
   .inputValidator(
     (raw: unknown) =>
-      z.object({ placeName: z.string().min(1).max(200), destination: z.string().min(1).max(120) }).parse(raw)
+      z.object({ query: z.string().min(1).max(200) }).parse(raw)
   )
-  .handler(async ({ placeName, destination }): Promise<string | null> => {
-    const apiKey = process.env.VITE_GOOGLE_PLACES_API_KEY;
-    if (!apiKey) return null; // Silently fail if API key missing
-
+  .handler(async ({ query }): Promise<string | null> => {
     try {
-      // Search for the place using Text Search API
-      const searchRes = await fetch("https://maps.googleapis.com/maps/api/place/textsearch/json", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          query: `${placeName} ${destination}`,
-          key: apiKey,
-        }),
-      });
+      // Unsplash API doesn't require authentication for basic requests
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&order_by=relevant`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
 
-      if (!searchRes.ok) return null;
+      if (!res.ok) return null;
 
-      type PlaceSearchResult = {
+      type UnsplashResponse = {
         results?: Array<{
-          place_id?: string;
-          photos?: Array<{ photo_reference: string }>;
+          urls?: {
+            regular?: string;
+          };
         }>;
       };
 
-      const searchData = (await searchRes.json()) as PlaceSearchResult;
-      const place = searchData.results?.[0];
-      if (!place?.photos?.[0]?.photo_reference) return null;
-
-      const photoRef = place.photos[0].photo_reference;
-
-      // Build photo URL using Places Photo API
-      const imageUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=${photoRef}&key=${apiKey}`;
-      return imageUrl;
+      const data = (await res.json()) as UnsplashResponse;
+      const imageUrl = data.results?.[0]?.urls?.regular;
+      return imageUrl || null;
     } catch {
-      return null; // Silently fail
+      return null; // Silently fail if network error
     }
   });
