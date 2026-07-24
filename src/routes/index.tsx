@@ -1,5 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, MapPin, ScrollText, Compass, BookOpen, Wallet, Feather, Quote } from "lucide-react";
+import heroJournal from "@/assets/hero-journal.jpg";
+import kyotoBamboo from "@/assets/kyoto-bamboo.jpg";
+import kyotoPath from "@/assets/kyoto-path.jpg";
+import kyotoTorii from "@/assets/kyoto-torii.jpg";
+import postcards from "@/assets/postcards.jpg";
+
+const DAY_IMAGES = [kyotoBamboo, kyotoPath, kyotoTorii];
 
 
 const SAMPLE_DAYS = [
