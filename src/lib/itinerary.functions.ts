@@ -18,7 +18,7 @@ export type ItineraryActivity = {
   title: string;
   category: string;
   description: string;
-  imageSearchQuery?: string; // Search term for Unsplash
+  imageSearchQuery: string; // REQUIRED: 2-4 word search query
 };
 
 export type ItineraryDay = {
@@ -67,17 +67,22 @@ export const generateItinerary = createServerFn({ method: "POST" })
 
     const system = `You are a meticulous travel journal author. You write day-by-day itineraries that feel like hand-annotated journals — specific place names, atmospheric detail, and a mix of tourist attractions, local events, cultural/heritage sites, and fun activities. Every day is unique.
 
-CRITICAL: For the "title" field in each activity, use ONLY real, specific place names or attractions that can be found in Google Maps/Places API:
-- Use official, well-known place names (e.g., "Fushimi Inari Shrine" not "ancient shrine")
-- Include both famous and local hidden gems
-- Be precise with locations (e.g., "Arashiyama Bamboo Grove" not just "bamboo forest")
-- Use the destination context to make activities geographically accurate
+CRITICAL REQUIREMENTS:
+1. For the "title" field: Use ONLY real, specific place names (e.g., "Fushimi Inari Shrine" not "ancient shrine")
+2. For the "imageSearchQuery" field: MANDATORY for EVERY activity, NO EXCEPTIONS
+   - Must be 2-4 words exactly
+   - Must describe the place/experience/food uniquely
+   - Must be searchable on Unsplash
+   - Examples: "fushimi inari shrine", "kyoto bamboo forest", "japanese ramen bowl"
+3. Every activity MUST have all fields including imageSearchQuery
 
 Output STRICT JSON only, no prose, no markdown fences.`;
 
     const userPrompt = `Plan a trip to "${data.destination}" for ${data.days} day(s) for ${data.travelers} traveler(s).
 Fare class: ${TIER_BRIEF[data.tier]}
 ${data.prompt ? `Additional user notes: ${data.prompt}` : ""}
+
+IMPORTANT: YOU MUST include imageSearchQuery for EVERY SINGLE activity. It is MANDATORY, not optional.
 
 Return JSON matching EXACTLY this TypeScript type:
 {
@@ -93,24 +98,28 @@ Return JSON matching EXACTLY this TypeScript type:
       "title": string,        // specific place or experience name
       "category": "Tourist Attraction" | "Local Event" | "Cultural Heritage" | "Fun Activity" | "Dining" | "Rest",
       "description": string,  // 1-3 sentences, journal voice, atmospheric
-      "imageSearchQuery": string  // CRITICAL: 2-4 word search query for Unsplash (e.g., "Fushimi Inari shrine", "cherry blossoms Kyoto", "ramen bowl")
+      "imageSearchQuery": string  // MANDATORY FOR EVERY ACTIVITY! 2-4 word search query for Unsplash photos
     }>
   }>,
   "tips": string[]            // 3-5 practical local tips tailored to the tier
 }
 
-CRITICAL REQUIREMENTS for "imageSearchQuery":
-- Must be 2-4 words only
-- Must describe the actual place/experience/food
-- Must be search-friendly for Unsplash
+MANDATORY "imageSearchQuery" Requirements for EVERY activity:
+- 2-4 words exactly (not more, not less)
+- Must describe the actual place/attraction/experience/food
+- Must be searchable on Unsplash (common terms, not made-up names)
 - Should include location context when helpful
-- Examples:
+- Best examples:
   ✅ "fushimi inari shrine"
   ✅ "arashiyama bamboo grove"
-  ✅ "japanese ramen"
-  ✅ "kyoto temple gardens"
-  ❌ "very nice place" (too vague)
-  ❌ "morning experience" (not searchable)
+  ✅ "japanese ramen noodles"
+  ✅ "kyoto temple garden"
+  ✅ "philosopher's path walk"
+  ❌ "amazing place" (too vague)
+  ❌ "beautiful scene" (not searchable)
+  ❌ "morning visit" (not descriptive)
+
+RULE: If ANY activity is missing imageSearchQuery, the entire response is INVALID and will be rejected.
 
 Include 4-6 activities per day, mixing categories. Do not repeat places across days.`;
 
@@ -161,11 +170,28 @@ Include 4-6 activities per day, mixing categories. Do not repeat places across d
     }
 
     const p = parsed as Partial<Itinerary>;
+    
+    // Ensure all activities have imageSearchQuery — fallback to title if missing
+    const normalizedDays = Array.isArray(p.days)
+      ? p.days.map((day) => ({
+          ...day,
+          activities: Array.isArray(day.activities)
+            ? day.activities.map((activity) => ({
+                ...activity,
+                imageSearchQuery:
+                  activity.imageSearchQuery ||
+                  activity.title ||
+                  "travel photography",
+              }))
+            : [],
+        }))
+      : [];
+    
     return {
       destination: p.destination ?? data.destination,
       tier: (p.tier as Itinerary["tier"]) ?? data.tier,
       travelers: p.travelers ?? data.travelers,
-      days: Array.isArray(p.days) ? p.days : [],
+      days: normalizedDays,
       tips: Array.isArray(p.tips) ? p.tips : [],
     };
   });

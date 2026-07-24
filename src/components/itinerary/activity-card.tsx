@@ -37,9 +37,7 @@ export function ActivityCard({ activity, index }: ActivityCardProps) {
       {/* ── Photo + text block ───────────────────────────────────────── */}
       <div className="flex gap-3 flex-1 min-w-0">
         {/* Location photo — suspends internally, shows skeleton while loading */}
-        {activity.imageSearchQuery ? (
-          <ActivityImage searchQuery={activity.imageSearchQuery} />
-        ) : null}
+        <ActivityImage searchQuery={activity.imageSearchQuery} />
 
         <div className="flex-1 min-w-0 pt-0.5">
           {/* Title + category badge */}
