@@ -343,13 +343,27 @@ function Landing() {
 
       {/* Stories */}
       <section id="stories" className="space-y-12 animate-reveal">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-dashed border-border pb-6">
-          <div>
-            <h2 className="font-serif italic text-4xl md:text-5xl mt-2">Postcards from past travelers.</h2>
+        <div className="relative rounded-3xl overflow-hidden ring-1 ring-border">
+          <img
+            src={postcards}
+            alt="Vintage postcards, stamps, and pressed leaves"
+            width={1024}
+            height={1024}
+            loading="lazy"
+            className="w-full h-56 md:h-72 object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
+          <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Section 05 · Field notes
+            </span>
+            <h2 className="font-serif italic text-4xl md:text-5xl mt-2 max-w-xl">
+              Postcards from past travelers.
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-sm mt-3">
+              Journals shared back after the trip — unedited, in their words.
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground max-w-sm">
-            Journals shared back after the trip — unedited, in their words.
-          </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
