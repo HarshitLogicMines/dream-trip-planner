@@ -126,18 +126,43 @@ function Landing() {
         </div>
 
         <div className="lg:col-span-7 space-y-6 animate-reveal [animation-delay:150ms]">
+          <div className="relative rounded-2xl overflow-hidden ring-1 ring-border">
+            <img
+              src={heroJournal}
+              alt="Open travel journal with pressed flowers, compass, and Kyoto postcards"
+              width={1024}
+              height={1024}
+              className="w-full h-64 md:h-80 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
+            <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-foreground/80 bg-background/70 backdrop-blur px-2 py-1 rounded">
+                LOG_KYOTO · SPRING '26
+              </span>
+              <span className="font-serif italic text-lg text-foreground/90">Vol. 03</span>
+            </div>
+          </div>
+
           <div className="flex justify-between items-end border-b-2 border-dashed border-border pb-4">
             <div className="font-serif italic text-2xl">Kyoto: The Zen Path</div>
           </div>
 
           <div className="space-y-4">
-            {SAMPLE_DAYS.map((d) => (
+            {SAMPLE_DAYS.map((d, i) => (
               <div
                 key={d.n}
                 className={`bg-card p-6 rounded-xl ring-1 ring-border flex gap-6 transition-all ${
                   d.active ? "hover:ring-accent/30" : "opacity-60"
                 }`}
               >
+                <img
+                  src={DAY_IMAGES[i]}
+                  alt={d.title}
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  className="hidden sm:block size-20 rounded-lg object-cover shrink-0 ring-1 ring-border"
+                />
                 <div className={`font-mono shrink-0 ${d.active ? "text-accent" : "text-muted-foreground"}`}>
                   <div className="text-2xl font-bold">{d.n}</div>
                   <div className="text-[10px] uppercase tracking-tighter opacity-60">{d.day}</div>
