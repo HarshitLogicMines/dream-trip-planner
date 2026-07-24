@@ -264,7 +264,10 @@ async function fetchOpenverseImage(term: string): Promise<string | null> {
 
     const data = (await res.json()) as OpenverseResponse;
     const first = data.results?.[0];
-    return first?.thumbnail || first?.url || null;
+    // Prefer the direct source image URL over the Openverse thumbnail proxy —
+    // the proxy endpoint rate-limits under concurrent load, causing preload
+    // failures. The direct URL is served from the original host (more reliable).
+    return first?.url || first?.thumbnail || null;
   } catch {
     return null;
   }

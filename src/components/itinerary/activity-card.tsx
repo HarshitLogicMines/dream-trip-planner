@@ -32,7 +32,7 @@ export function ActivityCard({ activity, destination, index }: ActivityCardProps
       }}
     >
       {/* ── Time column ──────────────────────────────────────────────── */}
-      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground pt-2 w-[80px] shrink-0 leading-tight">
+      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground pt-2 w-20 shrink-0 leading-tight">
         {activity.time}
       </div>
 

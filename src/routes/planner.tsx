@@ -45,7 +45,22 @@ function Planner() {
   const [destination, setDestination] = useState("");
   const [days, setDays] = useState(5);
   const [travelers, setTravelers] = useState(1);
-  const [tier, setTier] = useState<(typeof TIERS)[number]["id"]>(search.tier ?? "mid");
+  const [tier, setTier] = useState<(typeof TIERS)[number]["id"]>(() => {
+    if (search.tier) return search.tier;
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("ephemera.prefs");
+        if (raw) {
+          const saved = JSON.parse(raw) as { defaultTier?: string };
+          const valid = ["budget", "mid", "premium", "custom"] as const;
+          if (saved.defaultTier && (valid as readonly string[]).includes(saved.defaultTier)) {
+            return saved.defaultTier as (typeof TIERS)[number]["id"];
+          }
+        }
+      } catch {}
+    }
+    return "mid";
+  });
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
