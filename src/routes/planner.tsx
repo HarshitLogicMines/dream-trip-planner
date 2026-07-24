@@ -8,6 +8,7 @@ import { Loader2, Sparkles, MapPin, Users, Calendar, Check } from "lucide-react"
 import { generateItinerary, type Itinerary } from "@/lib/itinerary.functions";
 import { useSession } from "@/lib/auth";
 import { Link } from "@tanstack/react-router";
+import { ItineraryView } from "@/components/itinerary/itinerary-view";
 
 const TIERS = [
   { id: "budget", name: "Budget-Friendly", price: "$", body: "Hostels, transit, street food." },
@@ -226,65 +227,4 @@ function Field({
   );
 }
 
-function ItineraryView({ itinerary }: { itinerary: Itinerary }) {
-  return (
-    <section className="space-y-6 animate-reveal">
-      <div className="flex justify-between items-end border-b-2 border-dashed border-border pb-4">
-        <div className="font-serif italic text-2xl md:text-3xl">{itinerary.destination}</div>
-      </div>
-
-      <div className="space-y-4">
-        {itinerary.days.map((d) => (
-          <article key={d.day} className="bg-card p-6 rounded-xl ring-1 ring-border">
-            <div className="flex gap-6">
-              <div className="font-mono text-accent shrink-0 w-16">
-                <div className="text-3xl font-bold">
-                  {String(d.day).padStart(2, "0")}
-                </div>
-                <div className="text-[10px] uppercase tracking-tighter opacity-60">Day</div>
-              </div>
-              <div className="flex-1 space-y-4">
-                <div>
-                  <h3 className="font-serif text-2xl">{d.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{d.summary}</p>
-                </div>
-                <ul className="space-y-3 border-l border-dashed border-border pl-5">
-                  {d.activities.map((a, i) => (
-                    <li key={i} className="grid grid-cols-[80px_1fr] gap-4">
-                      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground pt-1">
-                        {a.time}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-serif text-lg">{a.title}</span>
-                          <span className="px-2 py-0.5 bg-background text-[9px] font-mono uppercase rounded text-accent border border-border">
-                            {a.category}
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-1">{a.description}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      {itinerary.tips.length > 0 && (
-        <div className="bg-foreground text-background rounded-xl p-8">
-          <div className="font-mono text-[10px] uppercase tracking-widest opacity-60">Field notes</div>
-          <ul className="mt-4 space-y-2 text-sm">
-            {itinerary.tips.map((t, i) => (
-              <li key={i} className="flex gap-3">
-                <span className="text-accent font-mono">→</span>
-                <span className="opacity-90">{t}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </section>
-  );
-}
+// ItineraryView has been extracted to @/components/itinerary/itinerary-view.tsx
