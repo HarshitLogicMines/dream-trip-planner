@@ -41,6 +41,7 @@ export function SiteHeader() {
           <div className="hidden md:flex gap-6 text-xs font-mono uppercase tracking-widest text-muted-foreground">
             {navLink("/", "Explore")}
             {navLink("/planner", "Planner")}
+            {navLink("/about", "About")}
             {user && navLink("/profile", "My Logs")}
           </div>
         </div>
