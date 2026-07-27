@@ -36,7 +36,9 @@ function Settings() {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) setPrefs({ ...DEFAULTS, ...(JSON.parse(raw) as Partial<Prefs>) });
-    } catch {}
+    } catch {
+      // Ignore parsing errors
+    }
     setHydrated(true);
   }, []);
 

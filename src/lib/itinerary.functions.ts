@@ -287,7 +287,7 @@ async function fetchOpenverseImage(term: string): Promise<string | null> {
  * Works for arbitrary places: cafes, restaurants, shops, viewpoints, landmarks.
  */
 async function fetchGooglePlacePhoto(query: string, destination?: string): Promise<string | null> {
-  const key = process.env.VITE_MAPS_API_KEY;
+  const key = process.env.MAPS_API_KEY;
   if (!key) return null; // No Maps key configured — fall back to Wikipedia
 
   const input = destination ? `${query}, ${destination}` : query;

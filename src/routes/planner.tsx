@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -57,7 +57,9 @@ function Planner() {
             return saved.defaultTier as (typeof TIERS)[number]["id"];
           }
         }
-      } catch {}
+      } catch {
+        // Ignore parsing errors
+      }
     }
     return "mid";
   });
@@ -66,11 +68,37 @@ function Planner() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [purchased, setPurchased] = useState(false);
 
+  // Restore draft state on mount
+  useEffect(() => {
+    try {
+      const draft = sessionStorage.getItem("ephemera.draft");
+      if (draft) {
+        const parsed = JSON.parse(draft);
+        if (parsed.destination) setDestination(parsed.destination);
+        if (parsed.days) setDays(parsed.days);
+        if (parsed.travelers) setTravelers(parsed.travelers);
+        if (parsed.prompt) setPrompt(parsed.prompt);
+        sessionStorage.removeItem("ephemera.draft"); // clear once loaded
+      }
+    } catch {
+      // Ignore sessionStorage reading errors
+    }
+  }, []);
+
   const canGenerate = destination.trim().length > 0 && days > 0 && travelers > 0;
 
   async function handleBuy() {
     if (!user) {
       toast.info("Sign in to purchase and generate your itinerary.");
+      // Save draft state
+      try {
+        sessionStorage.setItem(
+          "ephemera.draft",
+          JSON.stringify({ destination, days, travelers, prompt }),
+        );
+      } catch {
+        // Ignore sessionStorage saving errors
+      }
       navigate({ to: "/auth" });
       return;
     }

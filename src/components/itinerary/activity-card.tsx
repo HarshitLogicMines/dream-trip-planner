@@ -40,7 +40,7 @@ export function ActivityCard({ activity, destination, index }: ActivityCardProps
       <div className="flex gap-3 flex-1 min-w-0">
         {/* Real location photo — uses the actual place name for an accurate match */}
         <ActivityImage
-          searchQuery={activity.title || activity.imageSearchQuery}
+          searchQuery={activity.imageSearchQuery || activity.title}
           destination={destination}
         />
 
