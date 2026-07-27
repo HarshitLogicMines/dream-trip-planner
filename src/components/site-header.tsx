@@ -39,10 +39,9 @@ export function SiteHeader() {
             Ephemera.
           </Link>
           <div className="hidden md:flex gap-6 text-xs font-mono uppercase tracking-widest text-muted-foreground">
-            {navLink("/", "Explore")}
-            {navLink("/planner", "Planner")}
+            {navLink("/", "Home")}
             {navLink("/about", "About")}
-            {user && navLink("/profile", "My Logs")}
+            {navLink("/planner", "Planner")}
           </div>
         </div>
 

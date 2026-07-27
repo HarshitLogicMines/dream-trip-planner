@@ -40,9 +40,9 @@ function AboutPage() {
               Trips worth <br /> remembering.
             </h1>
             <p className="mt-8 text-lg text-muted-foreground max-w-lg leading-relaxed">
-              Ephemera is a slow-travel companion dressed as a paper journal. We turn a scribbled dream —
-              "ten days in Kyoto," "a weekend along the Amalfi coast" — into a day-by-day itinerary
-              written the way a friend who's been there would write it.
+              Ephemera is a slow-travel companion dressed as a paper journal. We turn a scribbled
+              dream — "ten days in Kyoto," "a weekend along the Amalfi coast" — into a day-by-day
+              itinerary written the way a friend who's been there would write it.
             </p>
             <div className="mt-10 flex gap-3">
               <Link
@@ -93,10 +93,10 @@ function AboutPage() {
               Planning shouldn't feel like a spreadsheet.
             </h2>
             <p className="mt-6 text-muted-foreground leading-relaxed">
-              Most planners hand you a checklist. We hand you a story. Ephemera reads your destination,
-              duration, travelers, and taste — then drafts a journal that balances the postcard-famous
-              with the corner-cafe quiet. Every day has a shape: a morning arc, a slow lunch, an
-              afternoon curiosity, an evening you'll write home about.
+              Most planners hand you a checklist. We hand you a story. Ephemera reads your
+              destination, duration, travelers, and taste — then drafts a journal that balances the
+              postcard-famous with the corner-cafe quiet. Every day has a shape: a morning arc, a
+              slow lunch, an afternoon curiosity, an evening you'll write home about.
             </p>
             <div className="mt-8 grid grid-cols-2 gap-6">
               <Stat value="180+" label="Destinations drafted" />
@@ -266,15 +266,7 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function HelpCard({
-  icon,
-  title,
-  body,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-}) {
+function HelpCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
     <div className="border border-border rounded-sm p-6 bg-background hover:bg-muted/40 transition-colors">
       <div className="size-9 rounded-full bg-accent/10 text-accent flex items-center justify-center">
@@ -295,15 +287,7 @@ function Service({ title, body }: { title: string; body: string }) {
   );
 }
 
-function Persona({
-  icon,
-  title,
-  body,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-}) {
+function Persona({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
     <div className="border border-border rounded-sm p-6">
       <div className="flex items-center gap-3">
