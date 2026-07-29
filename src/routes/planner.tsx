@@ -130,7 +130,7 @@ function Planner() {
   }
 
   return (
-    <main className="w-full px-8 py-12 space-y-16">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 space-y-16">
       <header className="space-y-4 animate-reveal">
         <h1 className="text-4xl md:text-6xl font-serif italic leading-[0.95]">
           Draft your itinerary.
@@ -141,10 +141,10 @@ function Planner() {
         </p>
       </header>
 
-      <section className="grid lg:grid-cols-12 gap-10 items-start">
+      <section className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-start">
         {/* Form */}
         <div className="lg:col-span-5 space-y-6 animate-reveal">
-          <div className="p-8 bg-card ring-1 ring-border rounded-2xl shadow-sm space-y-6">
+          <div className="p-5 sm:p-8 bg-card ring-1 ring-border rounded-2xl shadow-sm space-y-6">
             <Field label="Destination" icon={<MapPin className="size-3.5" />}>
               <input
                 value={destination}

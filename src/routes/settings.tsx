@@ -49,7 +49,7 @@ function Settings() {
   }, [prefs, hydrated]);
 
   return (
-    <main className="w-full px-8 py-12 space-y-12">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 space-y-12">
       <header className="animate-reveal">
         <h1 className="text-4xl md:text-5xl font-serif italic mt-4">Tune your journal.</h1>
       </header>
@@ -168,12 +168,12 @@ function Row({
   children: React.ReactNode;
 }) {
   return (
-    <div className="p-5 flex items-center justify-between gap-6">
-      <div>
+    <div className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-6">
+      <div className="min-w-0">
         <div className="font-serif text-base">{label}</div>
         {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
       </div>
-      <div className="shrink-0">{children}</div>
+      <div className="shrink-0 self-start sm:self-auto">{children}</div>
     </div>
   );
 }

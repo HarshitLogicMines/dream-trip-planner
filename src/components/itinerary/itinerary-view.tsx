@@ -31,13 +31,13 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
         {itinerary.days.map((d) => (
           <article
             key={d.day}
-            className="bg-card p-6 rounded-xl ring-1 ring-border"
+            className="bg-card p-4 sm:p-6 rounded-xl ring-1 ring-border"
             aria-label={`Day ${d.day}: ${d.title}`}
           >
-            <div className="flex gap-6">
+            <div className="flex gap-3 sm:gap-6">
               {/* Day number */}
-              <div className="font-mono text-accent shrink-0 w-16 select-none">
-                <div className="text-3xl font-bold leading-none">
+              <div className="font-mono text-accent shrink-0 w-12 sm:w-16 select-none">
+                <div className="text-2xl sm:text-3xl font-bold leading-none">
                   {String(d.day).padStart(2, "0")}
                 </div>
                 <div className="text-[10px] uppercase tracking-tighter opacity-60 mt-1">Day</div>
@@ -52,7 +52,7 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
 
                 {/* Activity list — each item is independently async */}
                 <ul
-                  className="space-y-5 border-l border-dashed border-border pl-5"
+                  className="space-y-5 border-l border-dashed border-border pl-3 sm:pl-5"
                   aria-label={`Activities for day ${d.day}`}
                 >
                   {d.activities.map((a, i) => (
@@ -72,7 +72,7 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
 
       {/* ── Field notes (tips) ─────────────────────────────────────── */}
       {itinerary.tips.length > 0 && (
-        <aside className="bg-foreground text-background rounded-xl p-8" aria-label="Travel tips">
+        <aside className="bg-foreground text-background rounded-xl p-6 sm:p-8" aria-label="Travel tips">
           <div className="font-mono text-[10px] uppercase tracking-widest opacity-60">
             Field notes
           </div>

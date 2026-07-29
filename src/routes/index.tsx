@@ -98,11 +98,11 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   return (
-    <main className="w-full px-8 py-12 space-y-24">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 space-y-16 md:space-y-24 overflow-x-hidden">
       {/* Hero + live preview */}
-      <section className="grid lg:grid-cols-12 gap-12 items-start">
+      <section className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         <div className="lg:col-span-5 space-y-8 animate-reveal">
-          <h1 className="text-5xl md:text-7xl font-serif italic text-balance leading-[0.9]">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif italic text-balance leading-[0.9]">
             Plan your next
             <br />
             unfolding story.
@@ -160,7 +160,7 @@ function Landing() {
             {SAMPLE_DAYS.map((d, i) => (
               <div
                 key={d.n}
-                className={`bg-card p-6 rounded-xl ring-1 ring-border flex gap-6 transition-all ${
+                className={`bg-card p-4 sm:p-6 rounded-xl ring-1 ring-border flex gap-3 sm:gap-6 transition-all ${
                   d.active ? "hover:ring-accent/30" : "opacity-60"
                 }`}
               >
@@ -178,7 +178,7 @@ function Landing() {
                   <div className="text-2xl font-bold">{d.n}</div>
                   <div className="text-[10px] uppercase tracking-tighter opacity-60">{d.day}</div>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-3 min-w-0 flex-1">
                   <h3 className="font-serif text-xl">{d.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{d.body}</p>
                   <div className="flex gap-2 flex-wrap">
@@ -479,9 +479,9 @@ function Landing() {
 
       {/* CTA */}
       <section className="bg-foreground text-background rounded-3xl overflow-hidden animate-reveal">
-        <div className="p-12 grid md:grid-cols-2 gap-12 items-center">
+        <div className="p-6 sm:p-10 md:p-12 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="space-y-6">
-            <h2 className="text-4xl font-serif italic">Save your wandering thoughts.</h2>
+            <h2 className="text-3xl md:text-4xl font-serif italic">Save your wandering thoughts.</h2>
             <p className="opacity-70 max-w-[36ch]">
               Create an account to save generated journals, revisit past trips, and sync with your
               logbook.
@@ -521,7 +521,7 @@ function SiteFooter() {
           © 2026 Digital Artifacts Co.
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-16">
+      <div className="grid grid-cols-2 gap-8 sm:gap-16">
         <div className="space-y-3">
           <div className="text-[10px] font-mono uppercase text-muted-foreground">Navigation</div>
           <ul className="space-y-2 text-sm font-medium">
