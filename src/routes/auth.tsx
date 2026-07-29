@@ -56,8 +56,8 @@ function Auth() {
   }
 
   return (
-    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 grid md:grid-cols-2 gap-10 items-stretch">
-      <section className="hidden md:flex flex-col justify-between bg-foreground text-background rounded-3xl p-10 animate-reveal">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 grid md:grid-cols-2 gap-6 md:gap-10 items-stretch">
+      <section className="hidden md:flex flex-col justify-between bg-foreground text-background rounded-3xl p-6 md:p-10 animate-reveal">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-60">
             Passport // 001
@@ -85,8 +85,8 @@ function Auth() {
         </ul>
       </section>
 
-      <section className="bg-card ring-1 ring-border rounded-3xl p-10 animate-reveal [animation-delay:100ms]">
-        <h2 className="mt-3 font-serif italic text-4xl">
+      <section className="bg-card ring-1 ring-border rounded-3xl p-6 sm:p-8 md:p-10 animate-reveal [animation-delay:100ms]">
+        <h2 className="mt-3 font-serif italic text-3xl sm:text-4xl">
           {mode === "signin" ? "Welcome back." : "Begin your archive."}
         </h2>
 

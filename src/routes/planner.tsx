@@ -141,10 +141,10 @@ function Planner() {
         </p>
       </header>
 
-      <section className="grid lg:grid-cols-12 gap-10 items-start">
+      <section className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-start">
         {/* Form */}
         <div className="lg:col-span-5 space-y-6 animate-reveal">
-          <div className="p-8 bg-card ring-1 ring-border rounded-2xl shadow-sm space-y-6">
+          <div className="p-5 sm:p-8 bg-card ring-1 ring-border rounded-2xl shadow-sm space-y-6">
             <Field label="Destination" icon={<MapPin className="size-3.5" />}>
               <input
                 value={destination}

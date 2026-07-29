@@ -31,12 +31,12 @@ function AboutPage() {
     <main className="w-full">
       {/* Hero */}
       <section className="w-full px-4 sm:px-6 md:px-8 pt-10 md:pt-16 pb-12 md:pb-20 border-b border-border">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
             <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
               Log_001 — About the journal
             </div>
-            <h1 className="mt-6 font-serif italic text-5xl md:text-7xl leading-none">
+            <h1 className="mt-6 font-serif italic text-4xl sm:text-5xl md:text-7xl leading-tight md:leading-none">
               Trips worth <br /> remembering.
             </h1>
             <p className="mt-8 text-lg text-muted-foreground max-w-lg leading-relaxed">
@@ -76,7 +76,7 @@ function AboutPage() {
 
       {/* Mission */}
       <section className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 border-b border-border">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
           <img
             src={aboutMission}
             alt="Traveler writing in a notebook at sunrise over the mountains"
@@ -154,7 +154,7 @@ function AboutPage() {
 
       {/* Services */}
       <section className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 border-b border-border">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
           <div className="md:sticky md:top-24">
             <img
               src={aboutServices}
@@ -236,7 +236,7 @@ function AboutPage() {
         <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
           Ready when you are
         </div>
-        <h2 className="mt-6 font-serif italic text-5xl md:text-6xl">
+        <h2 className="mt-6 font-serif italic text-4xl sm:text-5xl md:text-6xl">
           Your next journal is one prompt away.
         </h2>
         <p className="mt-6 text-muted-foreground max-w-xl mx-auto">

@@ -33,9 +33,9 @@ export function SiteHeader() {
 
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <div className="w-full px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="font-serif italic text-2xl font-black tracking-tighter">
+      <div className="w-full px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center gap-3">
+        <div className="flex items-center gap-4 sm:gap-8 min-w-0">
+          <Link to="/" className="font-serif italic text-xl sm:text-2xl font-black tracking-tighter shrink-0">
             Ephemera.
           </Link>
           <div className="hidden md:flex gap-6 text-xs font-mono uppercase tracking-widest text-muted-foreground">

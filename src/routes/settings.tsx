@@ -168,12 +168,12 @@ function Row({
   children: React.ReactNode;
 }) {
   return (
-    <div className="p-5 flex items-center justify-between gap-6">
-      <div>
+    <div className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-6">
+      <div className="min-w-0">
         <div className="font-serif text-base">{label}</div>
         {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
       </div>
-      <div className="shrink-0">{children}</div>
+      <div className="shrink-0 self-start sm:self-auto">{children}</div>
     </div>
   );
 }
