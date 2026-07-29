@@ -130,7 +130,7 @@ function Planner() {
   }
 
   return (
-    <main className="w-full px-8 py-12 space-y-16">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 space-y-16">
       <header className="space-y-4 animate-reveal">
         <h1 className="text-4xl md:text-6xl font-serif italic leading-[0.95]">
           Draft your itinerary.

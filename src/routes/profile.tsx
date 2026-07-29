@@ -20,7 +20,7 @@ function Profile() {
 
   if (!user) {
     return (
-      <main className="w-full px-8 py-24 text-center">
+      <main className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 text-center">
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
           Redirecting to sign in…
         </p>
@@ -37,7 +37,7 @@ function Profile() {
     .toUpperCase();
 
   return (
-    <main className="w-full px-8 py-12 space-y-12">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 space-y-12">
       <header className="animate-reveal">
         <div className="mt-6 flex items-center gap-6">
           <div className="size-24 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-mono text-2xl font-semibold">

@@ -98,7 +98,7 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   return (
-    <main className="w-full px-8 py-12 space-y-24">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 space-y-24">
       {/* Hero + live preview */}
       <section className="grid lg:grid-cols-12 gap-12 items-start">
         <div className="lg:col-span-5 space-y-8 animate-reveal">

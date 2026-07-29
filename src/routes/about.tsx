@@ -30,7 +30,7 @@ function AboutPage() {
   return (
     <main className="w-full">
       {/* Hero */}
-      <section className="w-full px-8 pt-16 pb-20 border-b border-border">
+      <section className="w-full px-4 sm:px-6 md:px-8 pt-10 md:pt-16 pb-12 md:pb-20 border-b border-border">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
@@ -75,7 +75,7 @@ function AboutPage() {
       </section>
 
       {/* Mission */}
-      <section className="w-full px-8 py-24 border-b border-border">
+      <section className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 border-b border-border">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <img
             src={aboutMission}
@@ -109,7 +109,7 @@ function AboutPage() {
       </section>
 
       {/* How we help */}
-      <section className="w-full px-8 py-24 border-b border-border">
+      <section className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 border-b border-border">
         <div className="max-w-3xl">
           <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
             How we help you plan
@@ -153,7 +153,7 @@ function AboutPage() {
       </section>
 
       {/* Services */}
-      <section className="w-full px-8 py-24 border-b border-border">
+      <section className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 border-b border-border">
         <div className="grid md:grid-cols-2 gap-16 items-start">
           <div className="md:sticky md:top-24">
             <img
@@ -203,7 +203,7 @@ function AboutPage() {
       </section>
 
       {/* Who it's for */}
-      <section className="w-full px-8 py-24 border-b border-border">
+      <section className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 border-b border-border">
         <div className="max-w-3xl">
           <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
             Who Ephemera is for
@@ -232,7 +232,7 @@ function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="w-full px-8 py-24 text-center">
+      <section className="w-full px-4 sm:px-6 md:px-8 py-14 md:py-24 text-center">
         <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
           Ready when you are
         </div>

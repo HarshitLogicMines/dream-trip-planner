@@ -56,7 +56,7 @@ function Auth() {
   }
 
   return (
-    <main className="w-full px-8 py-12 grid md:grid-cols-2 gap-10 items-stretch">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 grid md:grid-cols-2 gap-10 items-stretch">
       <section className="hidden md:flex flex-col justify-between bg-foreground text-background rounded-3xl p-10 animate-reveal">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-60">

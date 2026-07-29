@@ -49,7 +49,7 @@ function Settings() {
   }, [prefs, hydrated]);
 
   return (
-    <main className="w-full px-8 py-12 space-y-12">
+    <main className="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12 space-y-12">
       <header className="animate-reveal">
         <h1 className="text-4xl md:text-5xl font-serif italic mt-4">Tune your journal.</h1>
       </header>
