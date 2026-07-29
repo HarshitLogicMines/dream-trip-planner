@@ -24,7 +24,7 @@ export interface ActivityCardProps {
 export function ActivityCard({ activity, destination, index }: ActivityCardProps) {
   return (
     <li
-      className="flex gap-4 items-start animate-reveal opacity-0"
+      className="flex gap-2 sm:gap-4 items-start animate-reveal opacity-0"
       style={{
         // Cascade stagger: each card starts its reveal 80 ms after the last
         animationDelay: `${index * 80}ms`,
@@ -32,7 +32,7 @@ export function ActivityCard({ activity, destination, index }: ActivityCardProps
       }}
     >
       {/* ── Time column ──────────────────────────────────────────────── */}
-      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground pt-2 w-20 shrink-0 leading-tight">
+      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground pt-2 w-14 sm:w-20 shrink-0 leading-tight">
         {activity.time}
       </div>
 
